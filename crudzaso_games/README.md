@@ -1,6 +1,6 @@
 # CRUDAZSO Games
 
-CRUDAZSO Games is a command-line mini‑platform that manages users,
+¿Que tanto sabes? Games is a command-line mini‑platform that manages users,
 authentication, and a trivia-style game.\
 The project is structured in modular Python files, making it easy to
 extend, maintain, and scale.
