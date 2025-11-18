@@ -1,0 +1,636 @@
+import json
+import os
+
+'''Banco de preguntas. 
+Las preguntas estan alojadas en diccionarios, cada diccionario tiene tres claves: 
+1. texto: el valor corresponde a la pregunta que estamos haciendo 
+2. opciones: es una lista con las opciones de respuesta que se le proporcionan al usuario
+3. correcta : el valor corresponde al indice de la respuesta correcta en la lista "opciones" 
+
+Los diccionarios de cada pregunta estan alojados en tres listas: 
+1. preguntas_faciles: preguntas de menor dificultad
+2. preguntas_intermedias: preguntas de dificultad media
+3. preguntas_dificiles: preguntas de mayor dificultad '''
+
+#PREGUNTAS DE INGLES 
+preguntas_faciles_ingles = [
+    {
+        "texto": "Which one is correct?",
+        "opciones": ["I am agree", "I agree", "I'm agree", "I am in agree"],
+        "correcta": 1
+    },
+    {
+        "texto": "Choose the correct translation: 'Tengo 20 años'",
+        "opciones": ["I have 20 years", "I am 20 years", "I am 20", "I have 20"],
+        "correcta": 2
+    },
+    {
+        "texto": "Which sentence is correct?",
+        "opciones": ["She don't like coffee", "She doesn't like coffee", "She doesn't likes coffee", "She not like coffee"],
+        "correcta": 1
+    },
+    {
+        "texto": "Pick the natural one:",
+        "opciones": ["Can you help me?", "You can help me?", "You can help me no?", "You help me?"],
+        "correcta": 0
+    },
+    {
+        "texto": "What’s the plural of 'child'?",
+        "opciones": ["childs", "childes", "children", "childrens"],
+        "correcta": 2
+    },
+    {
+        "texto": "Choose the correct option:",
+        "opciones": ["I didn’t went", "I didn’t go", "I don’t went", "I no went"],
+        "correcta": 1
+    },
+    {
+        "texto": "Which one is correct?",
+        "opciones": ["There is two people", "There are two people", "There are two persons", "There is two persons"],
+        "correcta": 1
+    },
+    {
+        "texto": "Pick the correct translation for 'botón' (ropa):",
+        "opciones": ["bottom", "botton", "button", "buttom"],
+        "correcta": 2
+    }
+]
+
+
+preguntas_intermedias_ingles = [
+    {
+        "texto": "Which sentence is correct?",
+        "opciones": [
+            "He said me that he was tired.",
+            "He told me that he was tired.",
+            "He said to me that he was tired.",
+            "He told that he was tired."
+        ],
+        "correcta": 1
+    },
+    {
+        "texto": "Choose the natural sentence:",
+        "opciones": [
+            "I'm thinking to buy a car.",
+            "I'm thinking about buying a car.",
+            "I think to buy a car.",
+            "I'm thinking in buying a car."
+        ],
+        "correcta": 1
+    },
+    {
+        "texto": "Pick the correct option:",
+        "opciones": [
+            "I didn’t knew that.",
+            "I didn’t know that.",
+            "I don’t knew that.",
+            "I not knew that."
+        ],
+        "correcta": 1
+    },
+    {
+        "texto": "Which sounds more natural?",
+        "opciones": [
+            "It makes me feel good.",
+            "It makes me to feel good.",
+            "It makes me feeling good.",
+            "It makes me feel well."
+        ],
+        "correcta": 0
+    },
+    {
+        "texto": "Select the correct sentence:",
+        "opciones": [
+            "I'm interested on learning more.",
+            "I'm interested to learn more.",
+            "I'm interested in learning more.",
+            "I'm interesting in learn more."
+        ],
+        "correcta": 2
+    },
+    {
+        "texto": "Choose the correct option:",
+        "opciones": [
+            "He works hardly every day.",
+            "He hardly works every day.",
+            "He works hard every day.",
+            "He hard works every day."
+        ],
+        "correcta": 2
+    },
+    {
+        "texto": "Which is correct?",
+        "opciones": [
+            "We didn’t have to do it.",
+            "We mustn’t do it yesterday.",
+            "We hadn’t to do it.",
+            "We haven’t to do it yesterday."
+        ],
+        "correcta": 0
+    },
+    {
+        "texto": "Pick the correct sentence:",
+        "opciones": [
+            "I have the same age as her.",
+            "I am the same age with her.",
+            "I am the same age as she is.",
+            "I have the same age like her."
+        ],
+        "correcta": 2
+    },
+    {
+        "texto": "Choose the natural one:",
+        "opciones": [
+            "Let me know if you need something.",
+            "Let me know if you will need something.",
+            "Let me know if you needed something.",
+            "Let me know if you need anything."
+        ],
+        "correcta": 3
+    },
+    {
+        "texto": "Which sentence is correct?",
+        "opciones": [
+            "By the time I arrived, she already left.",
+            "By the time I arrived, she had already left.",
+            "By the time I have arrived, she already left.",
+            "By the time I arrive, she had already left."
+        ],
+        "correcta": 1
+    }
+]
+
+
+preguntas_dificiles_ingles = [
+    {
+        "texto": "Which sentence sounds the most natural?",
+        "opciones": [
+            "If I would know, I would tell you.",
+            "If I knew, I would tell you.",
+            "If I know, I will tell you.",
+            "If I would knew, I told you."
+        ],
+        "correcta": 1
+    },
+    {
+        "texto": "Choose the correct sentence:",
+        "opciones": [
+            "Neither of them are coming.",
+            "Neither of them is coming.",
+            "Neither they are coming.",
+            "Neither they is coming."
+        ],
+        "correcta": 1
+    },
+    {
+        "texto": "Pick the correct one:",
+        "opciones": [
+            "I look forward to see you.",
+            "I look forward to seeing you.",
+            "I'm looking forward to see you.",
+            "I am looking forward you."
+        ],
+        "correcta": 1
+    },
+    {
+        "texto": "Which option is grammatically correct?",
+        "opciones": [
+            "I have lived here since three years.",
+            "I live here since three years.",
+            "I have been living here for three years.",
+            "I am living here since three years."
+        ],
+        "correcta": 2
+    },
+    {
+        "texto": "Which one is correct?",
+        "opciones": [
+            "It depends of the situation.",
+            "It depends on the situation.",
+            "It depends from the situation.",
+            "It depends in the situation."
+        ],
+        "correcta": 1
+    },
+    {
+        "texto": "Choose the natural sentence:",
+        "opciones": [
+            "I'm used to wake up early.",
+            "I used to waking up early.",
+            "I'm used to waking up early.",
+            "I’m use to wake up early."
+        ],
+        "correcta": 2
+    },
+    {
+        "texto": "Pick the most natural option:",
+        "opciones": [
+            "Let's discuss about it.",
+            "Let's discuss it.",
+            "Let's discuss about this topic.",
+            "Let's talk it."
+        ],
+        "correcta": 1
+    },
+    {
+        "texto": "Which is correct?",
+        "opciones": [
+            "He suggested me to try it.",
+            "He suggested to me to try it.",
+            "He suggested that I try it.",
+            "He suggested that I to try it."
+        ],
+        "correcta": 2
+    }
+]
+
+
+
+#PREGUNTAS DE CULTURA E HISTORIA 
+preguntas_faciles_cultura = [
+    {
+        "texto": "¿En qué año llegó Cristóbal Colón a América?",
+        "opciones": ["1492", "1500", "1482", "1510"],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Cuál es la capital de Francia?",
+        "opciones": ["Londres", "Berlín", "París", "Madrid"],
+        "correcta": 2
+    },
+    {
+        "texto": "¿Quién escribió 'Don Quijote de la Mancha'?",
+        "opciones": ["Lope de Vega", "Miguel de Cervantes", "García Lorca", "Calderón de la Barca"],
+        "correcta": 1
+    },
+    {
+        "texto": "¿En qué continente está Egipto?",
+        "opciones": ["Asia", "Europa", "África", "América"],
+        "correcta": 2
+    },
+    {
+        "texto": "¿Cuántos continentes hay en el mundo?",
+        "opciones": ["5", "6", "7", "8"],
+        "correcta": 2
+    }
+]
+
+preguntas_intermedias_cultura = [
+    {
+        "texto": "¿Quién pintó 'La última cena'?",
+        "opciones": ["Miguel Ángel", "Leonardo da Vinci", "Rafael", "Donatello"],
+        "correcta": 1
+    },
+    {
+        "texto": "¿En qué año comenzó la Segunda Guerra Mundial?",
+        "opciones": ["1939", "1941", "1914", "1945"],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Qué civilización construyó Machu Picchu?",
+        "opciones": ["Aztecas", "Mayas", "Incas", "Olmecas"],
+        "correcta": 2
+    },
+    {
+        "texto": "¿Quién fue el primer presidente de Estados Unidos?",
+        "opciones": ["Thomas Jefferson", "George Washington", "Abraham Lincoln", "Benjamin Franklin"],
+        "correcta": 1
+    },
+    {
+        "texto": "¿En qué país se encuentra la Torre de Pisa?",
+        "opciones": ["Francia", "España", "Italia", "Grecia"],
+        "correcta": 2
+    }
+]
+
+
+preguntas_dificiles_cultura = [
+    {
+        "texto": "¿En qué año cayó el Imperio Romano de Occidente?",
+        "opciones": ["476 d.C.", "410 d.C.", "395 d.C.", "500 d.C."],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Quién escribió 'Cien años de soledad'?",
+        "opciones": ["Mario Vargas Llosa", "Gabriel García Márquez", "Pablo Neruda", "Julio Cortázar"],
+        "correcta": 1
+    },
+    {
+        "texto": "¿En qué batalla fue derrotado definitivamente Napoleón Bonaparte?",
+        "opciones": ["Austerlitz", "Leipzig", "Waterloo", "Jena"],
+        "correcta": 2
+    },
+    {
+        "texto": "¿Qué filósofo griego fue maestro de Platón?",
+        "opciones": ["Aristóteles", "Sócrates", "Pitágoras", "Heráclito"],
+        "correcta": 1
+    },
+    {
+        "texto": "¿En qué año se firmó la Declaración de Independencia de Estados Unidos?",
+        "opciones": ["1776", "1789", "1783", "1765"],
+        "correcta": 0
+    }
+]
+
+
+#PREGUNTAS DE PYTHON
+preguntas_faciles_python = [
+    {
+        "texto": "¿Cuál es la forma correcta de imprimir algo en Python?",
+        "opciones": ["print x", "echo(x)", "print(x)", "printf(x)"],
+        "correcta": 2
+    },
+    {
+        "texto": "¿Qué operador se usa para exponentes?",
+        "opciones": ["^", "**", "exp()", "//"],
+        "correcta": 1
+    },
+    {
+        "texto": "¿Cuál es el resultado de: 3 * 2 + 1?",
+        "opciones": ["7", "9", "5", "6"],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Qué tipo de dato es: True?",
+        "opciones": ["str", "int", "bool", "float"],
+        "correcta": 2
+    },
+    {
+        "texto": "¿Cómo se obtiene un dato ingresado por el usuario?",
+        "opciones": ["input()", "scan()", "read()", "ask()"],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Qué símbolo inicia un comentario?",
+        "opciones": ["/", "#", "//", "%%"],
+        "correcta": 1
+    },
+    {
+        "texto": "¿Cuál es el resultado de: len('hola')?",
+        "opciones": ["3", "4", "5", "Error"],
+        "correcta": 1
+    }
+]
+
+
+preguntas_intermedias_python = [
+    {
+        "texto": "¿Cuál opción verifica correctamente si x está entre 5 y 10?",
+        "opciones": ["5 < x < 10", "x > 5 && x < 10", "5 <= x <= 10 <= x", "x in range(5 to 10)"],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Cuál de estos tipos es mutable?",
+        "opciones": ["tuple", "str", "list", "int"],
+        "correcta": 2
+    },
+    {
+        "texto": "¿Qué imprime: print('a' * 3)?",
+        "opciones": ["aaa", "a3", "Error", "a a a"],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Qué hace el método append()?",
+        "opciones": [
+            "Agrega un elemento al final de la lista",
+            "Elimina el último elemento",
+            "Ordena la lista",
+            "Crea una copia"
+        ],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Cuál es el resultado de: bool(0)?",
+        "opciones": ["True", "False", "Error", "0"],
+        "correcta": 1
+    }
+]
+
+
+preguntas_dificiles_python = [
+    {
+        "texto": "¿Cuál es el resultado de: 'hola'.upper()?",
+        "opciones": ["HOLA", "Hola", "hola", "Error"],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Qué devuelve range(2, 6)?",
+        "opciones": ["[2,3,4,5]", "[2,3,4,5,6]", "[3,4,5,6]", "Error"],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Qué hace este código?\nnums = [1, 2, 3]\nnums.append(4)",
+        "opciones": [
+            "Reemplaza el último valor por 4",
+            "Agrega 4 al final",
+            "Elimina el 4 de la lista",
+            "Crea una lista nueva"
+        ],
+        "correcta": 1
+    },
+    {
+        "texto": "¿Qué imprime?\nfor i in range(3):\n    print(i)",
+        "opciones": ["0 1 2", "1 2 3", "0 1 2 3", "Solo 3"],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Qué retorna esta función?\ndef sumar(a, b):\n    return a + b\nsumar(3, 2)",
+        "opciones": ["5", "3", "2", "Error"],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Qué hace el método .split() en una cadena?",
+        "opciones": [
+            "Divide la cadena según espacios",
+            "Elimina espacios",
+            "Reemplaza espacios por comas",
+            "Convierte la cadena a lista de caracteres"
+        ],
+        "correcta": 0
+    },
+    {
+        "texto": "¿Qué imprime este código?\ntexto = 'Python'\nprint(texto[0])",
+        "opciones": ["P", "n", "Error", "Py"],
+        "correcta": 0
+    }
+]
+
+
+preguntas_faciles_historia = [
+    {"texto": "¿Quién descubrió América en 1492?",
+     "opciones": ["Marco Polo","Cristóbal Colón","Hernán Cortés","Vasco da Gama"],
+     "correcta": 1},
+    {"texto": "¿Qué civilización construyó las pirámides?",
+     "opciones": ["Romanos","Mayas","Egipcios","Persas"],
+     "correcta": 2},
+    {"texto": "¿En qué ciudad se encuentra el Coliseo?",
+     "opciones": ["Atenas","Roma","París","Estambul"],
+     "correcta": 1},
+    {"texto": "¿Qué invento permitió producir libros en masa?",
+     "opciones": ["Telégrafo","Imprenta","Reloj de arena","Máquina de vapor"],
+     "correcta": 1},
+    {"texto": "¿Quién fue el primer hombre en pisar la Luna?",
+     "opciones": ["Yuri Gagarin","Neil Armstrong","Buzz Aldrin","Alan Shepard"],
+     "correcta": 1},
+    {"texto": "¿Qué imperio construyó la Gran Muralla?",
+     "opciones": ["Japonés","Mongol","Chino","Persa"],
+     "correcta": 2},
+    {"texto": "¿Qué filósofo fue maestro de Alejandro Magno?",
+     "opciones": ["Platón","Aristóteles","Sócrates","Demócrito"],
+     "correcta": 1},
+    {"texto": "¿Qué país inició la Primera Guerra Mundial?",
+     "opciones": ["Alemania","Rusia","Austria-Hungría","Francia"],
+     "correcta": 2},
+    {"texto": "¿Qué civilización jugaba el juego de pelota?",
+     "opciones": ["Incas","Egipcios","Mayas","Vikingos"],
+     "correcta": 2},
+    {"texto": "¿Qué ruta conectaba Europa y Asia durante siglos?",
+     "opciones": ["Camino Inca","Ruta de la Seda","Ruta del Oro","Camino Real"],
+     "correcta": 1}
+]
+
+preguntas_intermedias_historia = [
+    {"texto": "¿Qué civilización inventó la escritura cuneiforme?",
+     "opciones": ["Fenicios","Sumerios","Griegos","Hititas"],
+     "correcta": 1},
+    {"texto": "¿Qué faraona gobernó Egipto como rey?",
+     "opciones": ["Cleopatra","Nefertiti","Hatshepsut","Meritamón"],
+     "correcta": 2},
+    {"texto": "¿Qué peste mató a un tercio de Europa?",
+     "opciones": ["Viruela","Cólera","Tifoidea","Peste Bubónica"],
+     "correcta": 3},
+    {"texto": "¿Quién dirigió la expansión francesa por Europa?",
+     "opciones": ["Luis XIV","Napoleón Bonaparte","Robespierre","Felipe II"],
+     "correcta": 1},
+    {"texto": "¿En qué año cayó Constantinopla?",
+     "opciones": ["1204","1492","1453","1000"],
+     "correcta": 2},
+    {"texto": "¿Qué tratado puso fin a la Primera Guerra Mundial?",
+     "opciones": ["París","Viena","Versalles","Ginebra"],
+     "correcta": 2},
+    {"texto": "¿Dónde nació la democracia?",
+     "opciones": ["Esparta","Roma","Atenas","Cartago"],
+     "correcta": 2},
+    {"texto": "¿Qué imperio construyó Petra?",
+     "opciones": ["Egipcio","Nabateo","Griego","Persa"],
+     "correcta": 1},
+    {"texto": "¿Qué evento inició la Segunda Guerra Mundial?",
+     "opciones": ["Pearl Harbor","Bombas atómicas","Invasión a Polonia","Hundimiento del Lusitania"],
+     "correcta": 2},
+    {"texto": "¿Quién unificó China y fue su primer emperador?",
+     "opciones": ["Confucio","Sun Tzu","Qin Shi Huang","Kublai Khan"],
+     "correcta": 2}
+]
+
+preguntas_dificiles_historia = [
+    {"texto": "¿Qué civilización creó el sistema del Quipu?",
+     "opciones": ["Maya","Egipcia","Inca","Persa"],
+     "correcta": 2},
+    {"texto": "¿Qué batalla detuvo la expansión musulmana en Europa en 732?",
+     "opciones": ["Poitiers","Austerlitz","Waterloo","Lepanto"],
+     "correcta": 0},
+    {"texto": "¿Quién fue el último zar de Rusia?",
+     "opciones": ["Alejandro III","Nicolás II","Iván IV","Pedro I"],
+     "correcta": 1},
+    {"texto": "¿Qué reino africano derrotó a Italia en 1896?",
+     "opciones": ["Etiopía","Mali","Egipto","Sudán"],
+     "correcta": 0},
+    {"texto": "¿Qué tratado dividió América entre España y Portugal?",
+     "opciones": ["Utrecht","Tordesillas","Lisboa","Toledo"],
+     "correcta": 1},
+    {"texto": "¿Qué emperador construyó Santa Sofía?",
+     "opciones": ["Constantino","Justiniano I","Teodosio","Marco Aurelio"],
+     "correcta": 1},
+    {"texto": "¿Qué guerra duró más de 100 años?",
+     "opciones": ["Crimea","Cien Años","Vietnam","Franco-Prusiana"],
+     "correcta": 1},
+    {"texto": "¿Qué civilización creó Angkor?",
+     "opciones": ["Khmer","Mongol","China","Coreana"],
+     "correcta": 0},
+    {"texto": "¿Qué país inició la Revolución Meiji?",
+     "opciones": ["Corea","China","Japón","Vietnam"],
+     "correcta": 2},
+    {"texto": "¿Qué rey creó el Código de Hammurabi?",
+     "opciones": ["Nabucodonosor","Hammurabi","Sargón","Asurbanipal"],
+     "correcta": 1}
+]
+
+#Preguntas de arte y musica
+
+arte_musica_faciles = [
+    {"texto": "¿Quién pintó la Mona Lisa?", "opciones": ["Leonardo da Vinci", "Picasso", "Van Gogh", "Monet"], "correcta": 0},
+    {"texto": "¿Cuál de estos es un instrumento de cuerda?", "opciones": ["Flauta", "Violín", "Trompeta", "Xilófono"], "correcta": 1},
+    {"texto": "¿Qué nota musical viene después de 'Do'?", "opciones": ["Mi", "Re", "Fa", "Si"], "correcta": 1},
+    {"texto": "¿Quién pintó 'La noche estrellada'?", "opciones": ["Van Gogh", "Dalí", "Picasso", "Rembrandt"], "correcta": 0},
+    {"texto": "¿Cuál de estos es un género musical?", "opciones": ["Cubismo", "Surrealismo", "Jazz", "Impresionismo"], "correcta": 2}
+]
+
+# nivel intermedio (5)
+arte_musica_intermedias = [
+    {"texto": "¿Quién compuso 'Für Elise'?", "opciones": ["Mozart", "Bach", "Beethoven", "Chopin"], "correcta": 2},
+    {"texto": "El estilo 'Impresionismo' es asociado con:", "opciones": ["Dalí", "Monet", "Frida Kahlo", "Warhol"], "correcta": 1},
+    {"texto": "¿Cuál es el tempo de 'Allegro'?", "opciones": ["Lento", "Rápido", "Muy lento", "Moderado"], "correcta": 1},
+    {"texto": "¿Quién pintó 'Las Meninas'?", "opciones": ["Velázquez", "Goya", "El Greco", "Murillo"], "correcta": 0},
+    {"texto": "¿Qué instrumento se usa en flamenco?", "opciones": ["Guitarra española", "Violín", "Piano", "Saxofón"], "correcta": 0}
+]
+
+# nivel dificil (5) - estas me costaron mas jaja
+arte_musica_dificiles = [
+    {"texto": "En música, ¿qué indica 'ff'?", "opciones": ["Muy suave", "Muy fuerte", "Moderado", "Creciente"], "correcta": 1},
+    {"texto": "¿Qué pintor es clave en el Cubismo?", "opciones": ["Picasso", "Matisse", "Kandinsky", "Seurat"], "correcta": 0},
+    {"texto": "¿Qué es un 'ostinato'?", "opciones": ["Escala descendente", "Acorde disonante", "Patrón repetido", "Silencio prolongado"], "correcta": 2},
+    {"texto": "¿Quién compuso 'La Traviata'?", "opciones": ["Verdi", "Puccini", "Mozart", "Rossini"], "correcta": 0},
+    {"texto": "¿Qué técnica pictórica usa huevo?", "opciones": ["Óleo", "Acuarela", "Temple", "Fresco"], "correcta": 2}
+]
+
+
+
+
+
+TEMAS_POR_DEFECTO = {
+    "Cultura": [
+        ("Fácil", preguntas_faciles_cultura),
+        ("Intermedio", preguntas_intermedias_cultura),
+        ("Difícil", preguntas_dificiles_cultura),
+    ],
+    "Ingles": [
+        ("Fácil", preguntas_faciles_ingles),
+        ("Intermedio", preguntas_intermedias_ingles),
+        ("Difícil", preguntas_dificiles_ingles),
+    ],
+    "Historia": [
+        ("Fácil", preguntas_faciles_historia),
+        ("Intermedio", preguntas_intermedias_historia),
+        ("Difícil", preguntas_dificiles_historia),
+    ],
+    "Python": [
+        ("Fácil", preguntas_faciles_python),
+        ("Intermedio", preguntas_intermedias_python),
+        ("Difícil", preguntas_dificiles_python),
+    ],
+    "Musica": [
+        ("Fácil", arte_musica_faciles),
+        ("Intermedio", arte_musica_intermedias),
+        ("Difícil", arte_musica_dificiles),
+    ]
+}
+
+RUTA_PREGUNTAS = "preguntas.json"
+
+
+def cargar_temas_desde_archivo():
+    if os.path.exists(RUTA_PREGUNTAS):
+        with open(RUTA_PREGUNTAS, "r", encoding="utf-8") as f:
+            return json.load(f)
+
+    return TEMAS_POR_DEFECTO
+
+
+def guardar_temas_en_archivo(temas_actuales):
+    with open(RUTA_PREGUNTAS, "w", encoding="utf-8") as f:
+        json.dump(temas_actuales, f, ensure_ascii=False, indent=2)
+
+
+
+temas = cargar_temas_desde_archivo()
+
