@@ -1,4 +1,4 @@
-# CRUDAZSO Games
+# ¿Que tanto sabes?
 
 ¿Que tanto sabes? Games is a command-line mini‑platform that manages users,
 authentication, and a trivia-style game.\
